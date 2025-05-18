@@ -1,0 +1,40 @@
+services:
+  db:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data
+
+  odoo18:
+    image: odoo:18.0
+    depends_on:
+      - db
+    ports:
+      - "8068:8069"
+    volumes:
+      - odoo18-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom-addons-18:/mnt/extra-addons
+    command: odoo -d odoo18 -i base,hotel_management --db_user=odoo --db_password=odoo --db_host=db
+
+  odoo17:
+    image: odoo:17.0
+    depends_on:
+      - db
+    ports:
+      - "8067:8069"
+    volumes:
+      - odoo17-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./custom-addons-17:/mnt/extra-addons
+    command: odoo -d odoo17 -i base --db_user=odoo --db_password=odoo --db_host=db
+
+volumes:
+  odoo18-web-data:
+  odoo-db-data:
+  odoo17-web-data:
