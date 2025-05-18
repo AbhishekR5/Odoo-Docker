@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-
 import io
 import json
 from odoo import fields, models, _
